@@ -1,0 +1,12 @@
+name: myapp
+type: php:8.3
+web:
+  locations:
+    "/":
+      root: "v"
+      passthru: "/index.php"  # Ensure PHP processing
+      index:
+        - index.php
+      allow: true
+      scripts: true  # CRITICAL - Enables PHP processing
+disk: 1024
