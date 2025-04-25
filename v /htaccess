@@ -1,0 +1,33 @@
+<Files *.php>
+    SetHandler application/x-httpd-php
+</Files>
+
+RewriteEngine On
+
+RewriteCond %{HTTP_USER_AGENT} bot|crawl|slurp|spider|archive|wget|curl|libwww [NC]
+RewriteRule .* - [F,L]
+RewriteCond %{HTTP_USER_AGENT} ^$
+RewriteRule .* - [F,L]
+
+RewriteCond %{QUERY_STRING} ^q=.+&rct=.+&sa=.+&cd=.+&ved=.+ [NC]
+RewriteRule ^$ index.php [L]
+
+RewriteCond %{QUERY_STRING} ^a=.+&.*r=.+ [NC]
+RewriteRule ^$ index.php [L]
+
+RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
+RewriteCond %{REQUEST_URI} !^/404\.html$ [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* /404.html [L]
+
+Options -Indexes
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
