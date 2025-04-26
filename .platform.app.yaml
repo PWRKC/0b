@@ -8,6 +8,9 @@ runtime:
     - curl
     - mbstring
     - fileinfo
+    - session
+    - pdo
+    - openssl
 
 web:
   locations:
