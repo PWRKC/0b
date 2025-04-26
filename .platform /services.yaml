@@ -1,4 +1,1 @@
-# Example MySQL service
-mysql:
-  type: mysql:10.4
-  disk: 1024
+
