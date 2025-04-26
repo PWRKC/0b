@@ -32,3 +32,4 @@ hooks:
     set -e
     mkdir -p public/views
     chmod -R 777 public/views
+    chmod -R 755 public
