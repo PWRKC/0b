@@ -1,12 +1,36 @@
-name: myapp
-type: php:8.3
+name: zerobot
+type: php:8.2
+
+runtime:
+  extensions:
+    - dom
+    - libxml
+    - curl
+    - session
+    - mbstring
+    - fileinfo
+
 web:
   locations:
     "/":
-      root: "v"
-      passthru: "/index.php"  # Ensure PHP processing
-      index:
-        - index.php
+      root: "public"
+      passthru: "/index.php"
       allow: true
-      scripts: true  # CRITICAL - Enables PHP processing
+      scripts: false
+      expires: -1
+
 disk: 1024
+
+mounts:
+  "/public/views": "shared:files/views"
+
+hooks:
+  build: |
+    set -e
+    # Install any required PHP extensions
+    php -m
+  deploy: |
+    set -e
+    # Ensure views directory exists and is writable
+    mkdir -p public/views
+    chmod -R 777 public/views
