@@ -1,12 +1,11 @@
-name: zerobot
+name: app
 type: php:8.2
 
 runtime:
   extensions:
     - dom
-    - libxml
+    - xml
     - curl
-    - session
     - mbstring
     - fileinfo
 
@@ -16,8 +15,6 @@ web:
       root: "public"
       passthru: "/index.php"
       allow: true
-      scripts: false
-      expires: -1
 
 disk: 1024
 
@@ -27,10 +24,8 @@ mounts:
 hooks:
   build: |
     set -e
-    # Install any required PHP extensions
     php -m
   deploy: |
     set -e
-    # Ensure views directory exists and is writable
     mkdir -p public/views
     chmod -R 777 public/views
