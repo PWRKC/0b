@@ -1,33 +1,12 @@
-name: app
-type: php:8.2
-
-runtime:
-  extensions:
-    - dom
-    - xml
-    - curl
-    - mbstring
-    - fileinfo
-    - pdo
-
+name: myapp
+type: php:8.3
 web:
   locations:
     "/":
-      root: "public"
-      passthru: "/index.php"
+      root: "v"
+      passthru: "/index.php"  # Ensure PHP processing
+      index:
+        - index.php
       allow: true
-      expires: -1  # Disable caching for PHP files
-
+      scripts: true  # CRITICAL - Enables PHP processing
 disk: 1024
-
-mounts:
-  "/public/views": "shared:files/views"
-
-hooks:
-  build: |
-    set -e
-    php -m  # Verify installed extensions
-  deploy: |
-    set -e
-    mkdir -p public/views
-    chmod -R 777 public/views
