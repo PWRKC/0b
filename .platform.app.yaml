@@ -9,6 +9,7 @@ runtime:
     - mbstring
     - fileinfo
     - pdo
+    - iconv
 
 web:
   locations:
@@ -16,7 +17,6 @@ web:
       root: "public"
       passthru: "/index.php"
       allow: true
-      scripts: true
       expires: -1
 
 disk: 1024
@@ -32,3 +32,4 @@ hooks:
     mkdir -p /tmp/sessions
     chmod -R 777 /tmp/sessions
     chmod 666 public/views.php 2>/dev/null || true
+    chmod 755 public
