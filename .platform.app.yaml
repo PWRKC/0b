@@ -38,8 +38,10 @@ hooks:
         set -e
         # Any deployment tasks
 
-relationships:
-    # Add any service relationships here if needed
-    # redis: 
-    #     service: redis
-    #     endpoint: redis
+# Relationships section must be either removed or properly defined
+# If you're not using relationships, simply remove this section
+# If you need relationships, uncomment and configure:
+# relationships:
+#     redis:
+#         service: redis
+#         endpoint: redis
