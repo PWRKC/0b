@@ -16,15 +16,19 @@ web:
       root: "public"
       passthru: "/index.php"
       allow: true
-      expires: -1  # Disable caching
+      scripts: true
+      expires: -1
 
 disk: 1024
 
 mounts:
-  "/public/views": "shared:files/views"
+  "/public/views.php":
+    source: local
+    source_path: "views.php"
 
 hooks:
   deploy: |
     set -e
-    mkdir -p public/views
-    chmod -R 777 public/views
+    mkdir -p /tmp/sessions
+    chmod -R 777 /tmp/sessions
+    chmod 666 public/views.php 2>/dev/null || true
