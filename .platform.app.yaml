@@ -7,41 +7,18 @@ runtime:
         - curl
         - simplexml
         - xml
-        - xmlreader
-        - xmlwriter
 
 web:
     locations:
         "/":
             allow: true
             passthru: "/index.php"
-            index:
-                - index.php
+            index: [index.php]
             scripts: true
             expires: -1
-            rules:
-                \.php$:
-                    allow: true
 
 disk: 512
-
 mounts:
     '/tmp':
         source: local
         source_path: tmp
-
-hooks:
-    build: |
-        set -e
-        # Install any additional dependencies if needed
-    deploy: |
-        set -e
-        # Any deployment tasks
-
-# Relationships section must be either removed or properly defined
-# If you're not using relationships, simply remove this section
-# If you need relationships, uncomment and configure:
-# relationships:
-#     redis:
-#         service: redis
-#         endpoint: redis
