@@ -1,12 +1,23 @@
-name: myapp
-type: php:8.3
+name: app
+type: php:8.2
+
+runtime:
+    extensions:
+        - dom
+        - libxml
+        - curl
+
 web:
-  locations:
-    "/":
-      root: "v"
-      passthru: "/index.php"  # Ensure PHP processing
-      index:
-        - index.php
-      allow: true
-      scripts: true  # CRITICAL - Enables PHP processing
-disk: 1024
+    locations:
+        "/":
+            allow: true
+            passthru: "/index.php"
+            index:
+                - index.php
+            scripts: true
+            expires: -1
+            rules:
+                \.php$:
+                    allow: true
+
+disk: 512
