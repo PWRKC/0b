@@ -4,8 +4,11 @@ type: php:8.2
 runtime:
     extensions:
         - dom
-        - libxml
         - curl
+        - simplexml
+        - xml
+        - xmlreader
+        - xmlwriter
 
 web:
     locations:
@@ -21,3 +24,22 @@ web:
                     allow: true
 
 disk: 512
+
+mounts:
+    '/tmp':
+        source: local
+        source_path: tmp
+
+hooks:
+    build: |
+        set -e
+        # Install any additional dependencies if needed
+    deploy: |
+        set -e
+        # Any deployment tasks
+
+relationships:
+    # Add any service relationships here if needed
+    # redis: 
+    #     service: redis
+    #     endpoint: redis
