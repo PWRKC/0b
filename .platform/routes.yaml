@@ -1,7 +1,5 @@
 "https://{default}/":
-  type: upstream
-  upstream: "zerobot:http"
-  
-"http://{default}/":
-  type: redirect
-  to: "https://{default}/"
+    type: upstream
+    upstream: "app:http"
+    cache:
+        enabled: false
