@@ -1,35 +1,23 @@
-name: zerobot
+name: app
 type: php:8.2
 
 runtime:
-  extensions:
-    - dom
-    - xml
-    - curl
-    - mbstring
-    - fileinfo
-    - pdo
-    - iconv
+    extensions:
+        - dom
+        - libxml
+        - curl
 
 web:
-  locations:
-    "/":
-      root: "public"
-      passthru: "/index.php"
-      allow: true
-      expires: -1
+    locations:
+        "/":
+            allow: true
+            passthru: "/index.php"
+            index:
+                - index.php
+            scripts: true
+            expires: -1
+            rules:
+                \.php$:
+                    allow: true
 
-disk: 1024
-
-mounts:
-  "/public/views.php":
-    source: local
-    source_path: "views.php"
-
-hooks:
-  deploy: |
-    set -e
-    mkdir -p /tmp/sessions
-    chmod -R 777 /tmp/sessions
-    chmod 666 public/views.php 2>/dev/null || true
-    chmod 755 public
+disk: 512
