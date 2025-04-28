@@ -1,23 +1,30 @@
-name: app
+name: zerobot
 type: php:8.2
 
 runtime:
-    extensions:
-        - dom
-        - libxml
-        - curl
+  extensions:
+    - dom
+    - xml
+    - curl
+    - mbstring
+    - fileinfo
+    - pdo
 
 web:
-    locations:
-        "/":
-            allow: true
-            passthru: "/index.php"
-            index:
-                - index.php
-            scripts: true
-            expires: -1
-            rules:
-                \.php$:
-                    allow: true
+  locations:
+    "/":
+      root: "public"
+      passthru: "/index.php"
+      allow: true
+      expires: -1  # Disable caching
 
-disk: 512
+disk: 1024
+
+mounts:
+  "/public/views": "shared:files/views"
+
+hooks:
+  deploy: |
+    set -e
+    mkdir -p public/views
+    chmod -R 777 public/views
